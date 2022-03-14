@@ -1,4 +1,4 @@
-package org.edx.mobile
+package org.edx.mobile.base
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder

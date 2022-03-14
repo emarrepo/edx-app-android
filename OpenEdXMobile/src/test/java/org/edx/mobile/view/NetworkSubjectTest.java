@@ -1,31 +1,26 @@
 package org.edx.mobile.view;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.edx.mobile.base.BaseFragmentActivity;
 import org.edx.mobile.interfaces.NetworkObserver;
 import org.edx.mobile.interfaces.NetworkSubject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 
 import java.util.Arrays;
 import java.util.Collection;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
-
 /**
  * Test NetworkSubject implementations for correctness
  */
-@RunWith(Parameterized.class)
 public class NetworkSubjectTest {
-    @Parameterized.Parameters
-    public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][] {
-                { new BaseFragmentActivity() {} }
-        });
-    }
 
-    @Parameterized.Parameter
+    @Mock
     public NetworkSubject networkSubject;
 
     @Test

@@ -1,4 +1,4 @@
-package org.edx.mobile.login;
+package org.edx.mobile.view.login;
 
 import android.view.View;
 

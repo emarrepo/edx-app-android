@@ -1,11 +1,13 @@
 
-package org.edx.mobile.view;
+package org.edx.mobile.view.base;
 
 import android.content.Intent;
 import androidx.annotation.NonNull;
 
 import org.edx.mobile.test.BaseTestCase;
 import org.edx.mobile.test.GenericSuperclassUtils;
+import org.edx.mobile.view.Presenter;
+import org.edx.mobile.view.PresenterActivity;
 import org.robolectric.Robolectric;
 import org.robolectric.android.controller.ActivityController;
 

@@ -1,4 +1,4 @@
-package org.edx.mobile.test;
+package org.edx.mobile.base;
 
 import android.content.Context;
 
@@ -7,7 +7,6 @@ import androidx.test.core.app.ApplicationProvider;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import org.edx.mobile.Injector;
 import org.edx.mobile.logger.Logger;
 import org.edx.mobile.test.util.TimeUtilsForTests;
 import org.edx.mobile.util.Config;
