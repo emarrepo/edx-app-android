@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.StringRes
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.android.billingclient.api.BillingResult
@@ -24,6 +25,7 @@ import org.edx.mobile.model.api.AuthorizationDenialReason
 import org.edx.mobile.model.course.CourseComponent
 import org.edx.mobile.util.AppConstants
 import org.edx.mobile.util.BrowserUtil
+import org.edx.mobile.util.InAppPurchasesException
 import org.edx.mobile.util.NonNullObserver
 import org.edx.mobile.util.ResourceUtil
 import org.edx.mobile.view.dialog.AlertDialogFragment
@@ -136,7 +138,9 @@ class CourseUnitMobileNotSupportedFragment : CourseUnitFragment() {
 
                 override fun onPurchaseCancel() {
                     iapViewModel.endLoading()
-                    showUpgradeErrorDialog()
+                    showUpgradeErrorDialog(
+                        errorResID = R.string.error_payment_not_processed
+                    )
                 }
 
                 override fun onPurchaseComplete(purchase: Purchase) {
@@ -169,10 +173,10 @@ class CourseUnitMobileNotSupportedFragment : CourseUnitFragment() {
                         binding.layoutUpgradeBtn.btnUpgrade.isEnabled = true
                     }, 500)
                 } else {
-                    showUpgradeErrorDialog()
+                    showUpgradeErrorDialog(errorResID = R.string.error_price_not_fetched)
                 }
             }
-        } ?: showUpgradeErrorDialog()
+        } ?: showUpgradeErrorDialog(errorResID = R.string.error_price_not_fetched)
     }
 
     private fun initObserver() {
@@ -201,11 +205,12 @@ class CourseUnitMobileNotSupportedFragment : CourseUnitFragment() {
                         )
                         return@NonNullObserver
                     }
-                    else -> showUpgradeErrorDialog()
+                    else -> showUpgradeErrorDialog(
+                        errorMsg.errorResId
+                    )
                 }
-            } else {
-                showUpgradeErrorDialog()
-            }
+            } else if (errorMsg.throwable is InAppPurchasesException)
+                showUpgradeErrorDialog(errorMsg.errorResId)
             iapViewModel.errorMessageShown()
         })
     }
@@ -229,10 +234,12 @@ class CourseUnitMobileNotSupportedFragment : CourseUnitFragment() {
         iapViewModel.executeOrder(purchaseToken = purchaseToken)
     }
 
-    private fun showUpgradeErrorDialog() {
+    private fun showUpgradeErrorDialog(
+        @StringRes errorResID: Int = R.string.general_error_message
+    ) {
         AlertDialogFragment.newInstance(
             getString(R.string.title_upgrade_error),
-            getString(R.string.upgrade_error_message),
+            getString(errorResID),
             getString(R.string.label_close),
             null,
             getString(R.string.label_get_help)
