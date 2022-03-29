@@ -25,6 +25,7 @@ import com.google.android.material.textview.MaterialTextView;
 
 import org.edx.mobile.R;
 import org.edx.mobile.core.IEdxEnvironment;
+import org.edx.mobile.inapppurchases.CourseUpgradeListener;
 import org.edx.mobile.logger.Logger;
 import org.edx.mobile.model.api.AuthorizationDenialReason;
 import org.edx.mobile.model.api.EnrolledCoursesResponse;
@@ -37,6 +38,7 @@ import org.edx.mobile.model.course.HasDownloadEntry;
 import org.edx.mobile.model.course.IBlock;
 import org.edx.mobile.model.course.VideoBlockModel;
 import org.edx.mobile.model.db.DownloadEntry;
+import org.edx.mobile.module.analytics.Analytics;
 import org.edx.mobile.module.db.DataCallback;
 import org.edx.mobile.module.db.IDatabase;
 import org.edx.mobile.module.storage.DownloadedVideoDeletedEvent;
@@ -85,11 +87,12 @@ public class CourseOutlineAdapter extends BaseAdapter {
     private IStorage storage;
     private EnrolledCoursesResponse courseData;
     private DownloadListener downloadListener;
+    private CourseUpgradeListener courseUpgradeListener;
     private boolean isVideoMode;
 
     public CourseOutlineAdapter(final Context context, final EnrolledCoursesResponse courseData,
                                 final IEdxEnvironment environment, DownloadListener listener,
-                                boolean isVideoMode, boolean isOnCourseOutline) {
+                                boolean isVideoMode, boolean isOnCourseOutline, CourseUpgradeListener courseUpgradeListener) {
         this.context = context;
         this.environment = environment;
         this.config = environment.getConfig();
@@ -98,6 +101,7 @@ public class CourseOutlineAdapter extends BaseAdapter {
         this.courseData = courseData;
         this.downloadListener = listener;
         this.isVideoMode = isVideoMode;
+        this.courseUpgradeListener = courseUpgradeListener;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         adapterData = new ArrayList();
         if (isOnCourseOutline && !isVideoMode) {
@@ -630,8 +634,11 @@ public class CourseOutlineAdapter extends BaseAdapter {
         upgradeBtn.setVisibility(courseData.getMode().equalsIgnoreCase(EnrollmentMode.AUDIT
                 .toString()) ? View.VISIBLE : View.GONE);
 
+        courseUpgradeListener.onComplete();
+
         upgradeBtnText.setOnClickListener(view1 -> CourseModalDialogFragment.newInstance(
                 environment.getConfig().getPlatformName(),
+                Analytics.Screens.COURSE_DASHBOARD,
                 courseData.getCourseId(),
                 courseData.getCourse().getName(),
                 courseData.getCourse().getPrice(),
