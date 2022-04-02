@@ -17,7 +17,6 @@ import org.edx.mobile.extenstion.isNotVisible
 import org.edx.mobile.extenstion.setImageDrawable
 import org.edx.mobile.extenstion.setVisibility
 import org.edx.mobile.http.HttpStatus
-import org.edx.mobile.http.HttpStatusException
 import org.edx.mobile.inapppurchases.BillingProcessor
 import org.edx.mobile.inapppurchases.BillingProcessor.BillingFlowListeners
 import org.edx.mobile.inapppurchases.ProductManager
@@ -194,10 +193,9 @@ class CourseUnitMobileNotSupportedFragment : CourseUnitFragment() {
         })
 
         iapViewModel.errorMessage.observe(viewLifecycleOwner, NonNullObserver { errorMsg ->
-            if (errorMsg.throwable is HttpStatusException) {
-                when (errorMsg.throwable.statusCode) {
-                    HttpStatus.UNAUTHORIZED,
-                    HttpStatus.FORBIDDEN -> {
+            if (errorMsg.throwable is InAppPurchasesException) {
+                when (errorMsg.throwable.httpErrorCode) {
+                    HttpStatus.UNAUTHORIZED -> {
                         environment.router?.forceLogout(
                             requireContext(),
                             environment.analyticsRegistry,
@@ -205,12 +203,11 @@ class CourseUnitMobileNotSupportedFragment : CourseUnitFragment() {
                         )
                         return@NonNullObserver
                     }
-                    else -> showUpgradeErrorDialog(
-                        errorMsg.errorResId
-                    )
+                    else -> showUpgradeErrorDialog(errorMsg.errorResId)
                 }
-            } else if (errorMsg.throwable is InAppPurchasesException)
+            } else {
                 showUpgradeErrorDialog(errorMsg.errorResId)
+            }
             iapViewModel.errorMessageShown()
         })
     }

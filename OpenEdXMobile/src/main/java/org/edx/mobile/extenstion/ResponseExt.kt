@@ -6,8 +6,8 @@ import org.edx.mobile.util.InAppPurchasesException
 import org.json.JSONObject
 import retrofit2.Response
 
-fun <T> Response<T>.toResult(callback: NetworkResponseCallback<T>, apiCode: Int) {
-    when (isSuccessful) {
+fun <T> Response<T>.toInAppPurchasesResult(callback: NetworkResponseCallback<T>, apiCode: Int) {
+    when (isSuccessful && body() != null) {
         true -> callback.onSuccess(
             Result.Success(
                 isSuccessful = isSuccessful,

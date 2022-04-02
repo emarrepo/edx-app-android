@@ -4,11 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.ResponseBody
 import org.edx.mobile.R
 import org.edx.mobile.exception.ErrorMessage
-import org.edx.mobile.http.HttpStatusException
 import org.edx.mobile.http.model.NetworkResponseCallback
 import org.edx.mobile.http.model.Result
 import org.edx.mobile.model.iap.AddToBasketResponse
@@ -16,7 +13,6 @@ import org.edx.mobile.model.iap.CheckoutResponse
 import org.edx.mobile.model.iap.ExecuteOrderResponse
 import org.edx.mobile.repositorie.InAppPurchasesRepository
 import org.edx.mobile.util.InAppPurchasesException
-import retrofit2.Response
 import javax.inject.Inject
 
 @HiltViewModel
@@ -56,12 +52,9 @@ class InAppPurchasesViewModel @Inject constructor(
             productId = productId,
             callback = object : NetworkResponseCallback<AddToBasketResponse> {
                 override fun onSuccess(result: Result.Success<AddToBasketResponse>) {
-                    if (result.data != null) {
-                        proceedCheckout(result.data.basketId)
-                    } else {
-                        setError(ErrorMessage.ADD_TO_BASKET_CODE, result.code, result.message)
-                        endLoading()
-                    }
+                    result.data?.let {
+                        proceedCheckout(it.basketId)
+                    } ?: endLoading()
                 }
 
                 override fun onError(error: Result.Error) {
@@ -77,12 +70,9 @@ class InAppPurchasesViewModel @Inject constructor(
             basketId = basketId,
             callback = object : NetworkResponseCallback<CheckoutResponse> {
                 override fun onSuccess(result: Result.Success<CheckoutResponse>) {
-                    if (result.data != null) {
-                        _checkoutResponse.value = result.data
-                    } else {
-                        setError(ErrorMessage.CHECKOUT_CODE, result.code, result.message)
-                        endLoading()
-                    }
+                    result.data?.let {
+                        _checkoutResponse.value = it
+                    } ?: endLoading()
                 }
 
                 override fun onError(error: Result.Error) {
@@ -99,11 +89,9 @@ class InAppPurchasesViewModel @Inject constructor(
             purchaseToken = purchaseToken,
             callback = object : NetworkResponseCallback<ExecuteOrderResponse> {
                 override fun onSuccess(result: Result.Success<ExecuteOrderResponse>) {
-                    if (result.data != null) {
-                        _executeOrderResponse.value = result.data
+                    result.data?.let {
+                        _executeOrderResponse.value = it
                         orderExecuted()
-                    } else {
-                        setError(ErrorMessage.EXECUTE_ORDER_CODE, result.code, result.message)
                     }
                     endLoading()
                 }
@@ -113,18 +101,6 @@ class InAppPurchasesViewModel @Inject constructor(
                     setError(ErrorMessage.EXECUTE_ORDER_CODE, error.throwable)
                 }
             })
-    }
-
-    fun setError(errorCode: Int, httpStatusCode: Int, msg: String) {
-        setError(
-            errorCode,
-            HttpStatusException(
-                Response.error<Any>(
-                    httpStatusCode,
-                    ResponseBody.create("text/plain".toMediaTypeOrNull(), msg)
-                )
-            )
-        )
     }
 
     fun setError(errorCode: Int, throwable: Throwable) {
