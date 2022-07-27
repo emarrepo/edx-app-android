@@ -38,7 +38,7 @@ phases:
 
       # - killall -KILL node
       - appium --log-timestamp --device-name $DEVICEFARM_DEVICE_NAME --platform-name $DEVICEFARM_DEVICE_PLATFORM_NAME --app $DEVICEFARM_APP_PATH
-        --app-pkg org.edx.mobile --app-activity .view.SplashActivity
+        --app-pkg cv.xlera.mobile.pega --app-activity .view.SplashActivity
         --app-wait-activity .view.DiscoveryLaunchActivity  >> $DEVICEFARM_LOG_DIR/appiumlog.txt 2>&1 &
 
       - start_appium_timeout=0;

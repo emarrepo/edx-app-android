@@ -8,16 +8,31 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:splitMotionEvents="false"
-        tools:background="@drawable/launch_background">
+        tools:background="@drawable/launch_banner">
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/edx_logo"
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/edx_quadruple_margin"
-            android:contentDescription="@string/phonetic_app_name"
-            app:srcCompat="@drawable/launch_screen_logo" />
+            android:layout_marginTop="@dimen/edx_quadruple_margin">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/edx_logo_background"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_centerInParent="true"
+                android:contentDescription="@string/phonetic_app_name"
+                app:srcCompat="@drawable/ic_holo_background" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/edx_logo"
+                android:layout_width="58dp"
+                android:layout_height="58dp"
+                android:layout_centerInParent="true"
+                android:contentDescription="@string/phonetic_app_name"
+                app:srcCompat="@drawable/launch_screen_ic" />
+
+        </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/bottom_layout"

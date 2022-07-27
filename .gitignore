@@ -61,7 +61,9 @@ test-build
 
 # Files related to release signing
 *.keystore
+*.jks
 /OpenEdXMobile/signing/keystore.properties
+/OpenEdXMobile/signing/release.jks
 
 # reports directory
 /artifacts
