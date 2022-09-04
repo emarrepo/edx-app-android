@@ -1,5 +1,7 @@
 # edX Android
 
+[![Build status](https://build.appcenter.ms/v0.1/apps/066ab1a9-356a-4f11-a43e-3ee67f983742/branches/qa/badge)](https://appcenter.ms)
+
 [<img align="right" alt="Get it on Google Play" height="128" src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png">](https://play.google.com/store/apps/details?id=org.edx.mobile)
 
 This is the source code for the edX mobile Android app. It is changing rapidly

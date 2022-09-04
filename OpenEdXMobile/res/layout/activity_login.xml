@@ -43,13 +43,36 @@
                         android:scaleType="fitXY"
                         app:srcCompat="@drawable/login_screen_image" />
 
-                    <androidx.appcompat.widget.AppCompatImageView
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/login_logo_background"
+                            android:layout_width="64dp"
+                            android:layout_height="64dp"
+                            android:layout_centerInParent="true"
+                            android:contentDescription="@string/phonetic_app_name"
+                            app:srcCompat="@drawable/ic_holo_background" />
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/login_logo"
+                            android:layout_width="58dp"
+                            android:layout_height="58dp"
+                            android:layout_centerInParent="true"
+                            android:contentDescription="@string/phonetic_app_name"
+                            app:srcCompat="@drawable/launch_screen_ic" />
+
+                    </RelativeLayout>
+
+                    <!--<androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/login_logo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:contentDescription="@string/phonetic_app_name"
-                        app:srcCompat="@drawable/login_screen_logo" />
+                        app:srcCompat="@drawable/login_screen_logo" />-->
                 </FrameLayout>
 
                 <LinearLayout
@@ -114,6 +137,7 @@
 
                     <LinearLayout
                         android:id="@+id/login_button_layout"
+                        android:background="@drawable/edx_brand_button"
                         style="@style/edX.Widget.SignInButtonLayout"
                         android:contentDescription="@string/login_btn"
                         android:focusable="true"
